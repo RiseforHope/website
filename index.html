@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.typekit.net/txd3inf.css">
-
 
     <style>
         /* =========================================
@@ -42,7 +40,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Typography Defaults */
         h1, h2, h3, h4, h5, h6 { font-family: var(--font-serif); font-weight: 400; }
         a { text-decoration: none; color: inherit; }
 
@@ -60,9 +57,9 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 var(--desktop-padding);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
             z-index: 2000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease;
         }
 
         .site-logo {
@@ -311,14 +308,13 @@
         .btn-arrow { font-size: 0.8rem; margin-left: 10px; display: inline-block; }
 
         /* =========================================
-           6. PATHWAYS SECTION (NEW - Yellow Cards)
+           6. PATHWAYS SECTION (Yellow Cards)
            ========================================= */
         .pathways-section {
             padding: 80px var(--desktop-padding);
             background-color: var(--col-white);
         }
 
-        /* Section Label (Top left line thing) */
         .section-label {
             font-family: var(--font-sans);
             font-weight: 900;
@@ -332,7 +328,6 @@
             margin-bottom: 40px;
         }
 
-        /* Main Heading "Are you..." */
         .pathways-heading {
             font-family: var(--font-serif);
             font-size: 3rem;
@@ -340,7 +335,6 @@
             margin-bottom: 50px;
         }
 
-        /* The Grid */
         .pathways-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -348,7 +342,6 @@
             margin-bottom: 60px;
         }
 
-        /* Yellow Card Button */
         .pathway-card {
             background-color: var(--col-gold);
             padding: 40px 30px;
@@ -368,31 +361,27 @@
             max-width: 85%;
         }
 
-        .pathway-card .card-arrow {
-            font-size: 1rem;
-            color: var(--col-black);
-            transition: transform 0.3s ease;
+        /* CSS TRIANGLE (Fix for Mobile) */
+        .card-arrow {
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 8px solid var(--col-black); /* Black Arrow */
+            transition: border-left-color 0.3s ease, transform 0.3s ease;
         }
 
-        /* HOVER EFFECT: Turn Black */
-        .pathway-card:hover {
-            background-color: var(--col-black);
-        }
+        /* Hover Effects */
+        .pathway-card:hover { background-color: var(--col-black); }
+        .pathway-card:hover .card-text { color: var(--col-white); }
 
-        .pathway-card:hover .card-text {
-            color: var(--col-white);
-        }
-
+        /* Hover: Arrow turns Gold */
         .pathway-card:hover .card-arrow {
-            color: var(--col-gold);
+            border-left-color: var(--col-gold);
             transform: translateX(5px);
         }
 
-        /* Bottom Text Links */
-        .pathways-links {
-            display: flex;
-            gap: 40px;
-        }
+        .pathways-links { display: flex; gap: 40px; }
 
         .text-link {
             font-family: var(--font-serif);
@@ -401,22 +390,142 @@
             border-bottom: 1px solid var(--col-black);
             padding-bottom: 2px;
             transition: color 0.3s ease, border-color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .text-link span {
+        /* Text Link Arrow */
+        .text-link-arrow {
+            width: 0;
+            height: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 7px solid var(--col-black);
+            transition: border-left-color 0.3s ease;
+        }
+
+        .text-link:hover { color: var(--col-gold); border-color: var(--col-gold); }
+        .text-link:hover .text-link-arrow { border-left-color: var(--col-gold); }
+
+        /* =========================================
+           7. IN FOCUS SECTION (NEW)
+           ========================================= */
+        .infocus-section {
+            padding: 80px var(--desktop-padding);
+            background-color: var(--col-white);
+        }
+
+        .infocus-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 50% Image, 50% Text */
+            margin-bottom: 80px;
+            /* Minimal Shadow for "Soft Card" effect */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .infocus-image {
+            min-height: 400px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .infocus-content {
+            background-color: var(--col-white);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        /* THE NOTCH (White Triangle Overlay)
+           Uses pseudo-element on the TEXT container to "point" into the image
+        */
+        .infocus-content::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            z-index: 10;
+        }
+
+        /* Orientation 1: Image Left, Text Right */
+        /* Arrow points LEFT (White border-right) */
+        .infocus-row:not(.reversed) .infocus-content::before {
+            left: -20px; /* Push it out to overlap image */
+            border-right: 20px solid var(--col-white);
+        }
+
+        /* Orientation 2: Text Left, Image Right */
+        /* Arrow points RIGHT (White border-left) */
+        .infocus-row.reversed .infocus-content::before {
+            right: -20px;
+            border-left: 20px solid var(--col-white);
+        }
+
+        .infocus-title {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--col-black);
+        }
+
+        .infocus-desc {
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Yellow Button (Different from Cyan) */
+        .btn-yellow {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--col-gold);
+            color: var(--col-black);
+            padding: 15px 30px;
+            font-family: var(--font-sans);
+            font-weight: 700;
             font-size: 0.8rem;
-            vertical-align: middle;
-            margin-left: 5px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
         }
 
-        .text-link:hover {
-            color: var(--col-gold); /* Optional hover for text links */
-            border-color: var(--col-gold);
+        .btn-yellow:hover {
+            background-color: #e5c93d;
+        }
+
+        .btn-yellow-arrow {
+            width: 0;
+            height: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 7px solid var(--col-black);
+            margin-left: 10px;
         }
 
         /* Mobile Adjustments */
         @media (max-width: 900px) {
             .pathways-grid { grid-template-columns: 1fr 1fr; }
+
+            /* Stack In Focus Rows */
+            .infocus-row { grid-template-columns: 1fr; box-shadow: none; }
+
+            /* Reorder Reversed row so Image is always top on mobile */
+            .infocus-row.reversed .infocus-image { order: -1; }
+
+            /* Hide notches on mobile */
+            .infocus-content::before { display: none; }
+            .infocus-content { padding: 40px 20px; }
         }
 
         @media (max-width: 768px) {
@@ -426,9 +535,8 @@
             .nav-link { font-size: 1.8rem; }
             .mission-title { font-size: 2.2rem; }
 
-            /* Pathways Mobile */
-            .pathways-section { padding: 60px 20px; }
-            .pathways-grid { grid-template-columns: 1fr; } /* 1 column on mobile */
+            .pathways-section, .infocus-section { padding: 60px 20px; }
+            .pathways-grid { grid-template-columns: 1fr; }
             .pathways-links { flex-direction: column; gap: 20px; }
         }
     </style>
@@ -481,35 +589,62 @@
 </section>
 
 <section id="get-involved" class="pathways-section">
-
     <div class="section-label">Get Involved</div>
-
     <h2 class="pathways-heading">How can we help you?</h2>
 
     <div class="pathways-grid">
         <a href="#" class="pathway-card">
             <span class="card-text">A family needing support?</span>
-            <span class="card-arrow">▶</span>
+            <span class="card-arrow"></span>
         </a>
         <a href="#" class="pathway-card">
             <span class="card-text">Ready to help a family?</span>
-            <span class="card-arrow">▶</span>
+            <span class="card-arrow"></span>
         </a>
         <a href="#" class="pathway-card">
             <span class="card-text">Thinking of volunteering?</span>
-            <span class="card-arrow">▶</span>
+            <span class="card-arrow"></span>
         </a>
         <a href="#" class="pathway-card">
             <span class="card-text">Interested in partnering?</span>
-            <span class="card-arrow">▶</span>
+            <span class="card-arrow"></span>
         </a>
     </div>
 
     <div class="pathways-links">
-        <a href="#" class="text-link">Information for donors <span>▶</span></a>
-        <a href="#" class="text-link">Information for teachers <span>▶</span></a>
+        <a href="#" class="text-link">Information for donors <span class="text-link-arrow"></span></a>
+        <a href="#" class="text-link">Information for teachers <span class="text-link-arrow"></span></a>
+    </div>
+</section>
+
+<section class="infocus-section">
+    <div class="section-label">In Focus</div>
+
+    <div class="infocus-row">
+        <div class="infocus-image" style="background-image: url('https://res.cloudinary.com/dvexnl19a/image/upload/v1764050764/IMG_0979_kddbxw.jpg');"></div>
+        <div class="infocus-content">
+            <h3 class="infocus-title">Meet our Community</h3>
+            <p class="infocus-desc">
+                Rise for Hope is more than just a charity – it's the people! Come and spend a day in the lives of the people who make our community strong.
+            </p>
+            <a href="#" class="btn-yellow">
+                Meet Limara <span class="btn-yellow-arrow"></span>
+            </a>
+        </div>
     </div>
 
+    <div class="infocus-row reversed">
+        <div class="infocus-content">
+            <h3 class="infocus-title">Discovering the brightest talent</h3>
+            <p class="infocus-desc">
+                We believe that everyone should have the opportunity to reach their full potential and that a diverse community is a strong community.
+            </p>
+            <a href="#" class="btn-yellow">
+                Read about our work <span class="btn-yellow-arrow"></span>
+            </a>
+        </div>
+        <div class="infocus-image" style="background-image: url('https://res.cloudinary.com/dvexnl19a/image/upload/v1764050764/IMG_0979_kddbxw.jpg');"></div>
+    </div>
 </section>
 
 <script>
