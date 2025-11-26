@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rise for Hope - Empowering Communities</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           1. RESET & VARIABLES
+           ========================================= */
+        :root {
+            /* Brand Colors */
+            --col-black: #1D1B1A;
+            --col-gold: #FADC45;
+            --col-white: #ffffff;
+            --col-gray: #f4f4f4;
+            --col-cyan: #5CD6E8;
+
+            /* TYPOGRAPHY */
+            --font-serif: 'Magneta', 'Playfair Display', Times, serif;
+            --font-sans: 'Lato', Helvetica, Arial, sans-serif;
+
+            --header-height: 90px;
+            --desktop-padding: 88px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--col-white);
+            font-family: var(--font-sans);
+            color: var(--col-black);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Typography Defaults */
+        h1, h2, h3, h4, h5, h6 { font-family: var(--font-serif); font-weight: 400; }
+        a { text-decoration: none; color: inherit; }
+
+        /* =========================================
+           2. HEADER SECTION
+           ========================================= */
+        .site-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background-color: var(--col-white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 var(--desktop-padding);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            z-index: 2000;
+        }
+
+        .site-logo {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 2010;
+        }
+
+        .site-logo-text {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            color: var(--col-black);
+            letter-spacing: -0.02em;
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .site-logo-sub {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #666;
+            margin-top: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            z-index: 2010;
+        }
+
+        .menu-label {
+            font-family: var(--font-sans);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            color: var(--col-black);
+            transition: color 0.3s ease;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        .burger-icon {
+            width: 30px;
+            height: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .burger-icon span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: var(--col-black);
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-origin: center;
+        }
+
+        /* MENU OPEN STATE */
+        body.menu-open .site-header { background-color: transparent; border-bottom-color: transparent; }
+        body.menu-open .site-logo-text { color: var(--col-white); }
+        body.menu-open .site-logo-sub { color: rgba(255,255,255,0.7); }
+        body.menu-open .menu-label { color: var(--col-white); }
+        body.menu-open .burger-icon span { background-color: var(--col-white); }
+        body.menu-open .burger-icon span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        body.menu-open .burger-icon span:nth-child(2) { opacity: 0; }
+        body.menu-open .burger-icon span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        /* =========================================
+           3. NAVIGATION OVERLAY
+           ========================================= */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--col-black);
+            z-index: 1500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transition: opacity 0.5s ease, visibility 0s linear 0s;
+        }
+
+        .nav-list { list-style: none; text-align: center; }
+        .nav-list li { margin: 20px 0; opacity: 0; transform: translateY(20px); transition: 0.4s ease; }
+        .nav-overlay.active .nav-list li:nth-child(1) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+        .nav-overlay.active .nav-list li:nth-child(2) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+        .nav-overlay.active .nav-list li:nth-child(3) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+        .nav-overlay.active .nav-list li:nth-child(4) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
+        .nav-overlay.active .nav-list li:nth-child(5) { transition-delay: 0.7s; opacity: 1; transform: translateY(0); }
+
+        .nav-link {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            color: var(--col-white);
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: var(--col-gold); }
+
+        /* =========================================
+           4. HERO SECTION
+           ========================================= */
+        .rise-hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-top: calc(var(--header-height) * -1);
+            padding-top: var(--header-height);
+        }
+
+        .hero-bg, .hero-overlay {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            left: 0;
+            width: 100%;
+        }
+
+        .hero-bg { background-size: cover; background-position: center; z-index: 0; }
+        .hero-overlay { background: rgba(0, 0, 0, 0.2); z-index: 1; }
+
+        @media (min-width: 769px) {
+            .hero-bg, .hero-overlay {
+                left: var(--desktop-padding);
+                width: calc(100% - (var(--desktop-padding) * 2));
+            }
+        }
+
+        .scroll-btn {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 2;
+            padding: 20px;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            animation: fadeIn 1s ease-out 0.5s forwards, bounce 2.5s infinite 1.5s;
+        }
+
+        .scroll-arrow {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid var(--col-white);
+            border-right: 2px solid var(--col-white);
+            transform: rotate(45deg);
+        }
+
+        .scroll-text {
+            color: var(--col-white);
+            font-family: var(--font-sans);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+        }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* =========================================
+           5. MISSION SECTION
+           ========================================= */
+        .mission-section {
+            padding: 120px 20px;
+            background-color: var(--col-white);
+            text-align: center;
+        }
+
+        .mission-content { max-width: 800px; margin: 0 auto; }
+
+        .mission-title {
+            font-family: var(--font-serif);
+            font-size: 3.2rem;
+            color: var(--col-black);
+            margin-bottom: 40px;
+            line-height: 1.2;
+        }
+
+        .mission-text {
+            font-family: var(--font-sans);
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--col-black);
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-cyan {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--col-cyan);
+            color: var(--col-black);
+            padding: 18px 35px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-cyan:hover { background-color: #4ac5d6; }
+        .btn-arrow { font-size: 0.8rem; margin-left: 10px; display: inline-block; }
+
+        /* =========================================
+           6. PATHWAYS SECTION (NEW - Yellow Cards)
+           ========================================= */
+        .pathways-section {
+            padding: 80px var(--desktop-padding);
+            background-color: var(--col-white);
+        }
+
+        /* Section Label (Top left line thing) */
+        .section-label {
+            font-family: var(--font-sans);
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            color: var(--col-black);
+            border-bottom: 3px solid var(--col-gold);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+
+        /* Main Heading "Are you..." */
+        .pathways-heading {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            color: var(--col-black);
+            margin-bottom: 50px;
+        }
+
+        /* The Grid */
+        .pathways-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        /* Yellow Card Button */
+        .pathway-card {
+            background-color: var(--col-gold);
+            padding: 40px 30px;
+            min-height: 180px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pathway-card .card-text {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            line-height: 1.2;
+            color: var(--col-black);
+            max-width: 85%;
+        }
+
+        .pathway-card .card-arrow {
+            font-size: 1rem;
+            color: var(--col-black);
+            transition: transform 0.3s ease;
+        }
+
+        /* HOVER EFFECT: Turn Black */
+        .pathway-card:hover {
+            background-color: var(--col-black);
+        }
+
+        .pathway-card:hover .card-text {
+            color: var(--col-white);
+        }
+
+        .pathway-card:hover .card-arrow {
+            color: var(--col-gold);
+            transform: translateX(5px);
+        }
+
+        /* Bottom Text Links */
+        .pathways-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .text-link {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--col-black);
+            border-bottom: 1px solid var(--col-black);
+            padding-bottom: 2px;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .text-link span {
+            font-size: 0.8rem;
+            vertical-align: middle;
+            margin-left: 5px;
+        }
+
+        .text-link:hover {
+            color: var(--col-gold); /* Optional hover for text links */
+            border-color: var(--col-gold);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 900px) {
+            .pathways-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .site-header { padding: 0 20px; }
+            .menu-label { display: none; }
+            .site-logo-text { font-size: 1.4rem; }
+            .nav-link { font-size: 1.8rem; }
+            .mission-title { font-size: 2.2rem; }
+
+            /* Pathways Mobile */
+            .pathways-section { padding: 60px 20px; }
+            .pathways-grid { grid-template-columns: 1fr; } /* 1 column on mobile */
+            .pathways-links { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="#" class="site-logo">
+        <span class="site-logo-text">Rise For Hope</span>
+        <span class="site-logo-sub">Empowering Communities</span>
+    </a>
+
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle Menu">
+        <span class="menu-label" id="menuLabel">Menu</span>
+        <div class="burger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </button>
+</header>
+
+<nav class="nav-overlay">
+    <ul class="nav-list">
+        <li><a href="#" class="nav-link" onclick="toggleMenu()">Home</a></li>
+        <li><a href="#about" class="nav-link" onclick="toggleMenu()">About Us</a></li>
+        <li><a href="#services" class="nav-link" onclick="toggleMenu()">Services</a></li>
+        <li><a href="#get-involved" class="nav-link" onclick="toggleMenu()">Get Involved</a></li>
+        <li><a href="#contact" class="nav-link" onclick="toggleMenu()">Contact</a></li>
+    </ul>
+</nav>
+
+<section class="rise-hero" role="banner" aria-label="Hero image">
+    <div class="hero-bg" style="background-image: url('https://res.cloudinary.com/dvexnl19a/image/upload/v1764050764/IMG_0979_kddbxw.jpg');"></div>
+    <div class="hero-overlay"></div>
+    <button class="scroll-btn" onclick="document.getElementById('mission').scrollIntoView({behavior: 'smooth'})" aria-label="Scroll down">
+        <span class="scroll-arrow"></span>
+        <span class="scroll-text">Scroll</span>
+    </button>
+</section>
+
+<section id="mission" class="mission-section">
+    <div class="mission-content">
+        <h2 class="mission-title">Supporting kids with cancer and their families</h2>
+        <p class="mission-text">Our mission is to ease the financial and emotional strain on children with cancer and their families.</p>
+        <a href="#learn-more" class="btn-cyan">
+            Learn More <span class="btn-arrow">▶</span>
+        </a>
+    </div>
+</section>
+
+<section id="get-involved" class="pathways-section">
+
+    <div class="section-label">Get Involved</div>
+
+    <h2 class="pathways-heading">How can we help you?</h2>
+
+    <div class="pathways-grid">
+        <a href="#" class="pathway-card">
+            <span class="card-text">A family needing support?</span>
+            <span class="card-arrow">▶</span>
+        </a>
+        <a href="#" class="pathway-card">
+            <span class="card-text">Ready to help a family?</span>
+            <span class="card-arrow">▶</span>
+        </a>
+        <a href="#" class="pathway-card">
+            <span class="card-text">Thinking of volunteering?</span>
+            <span class="card-arrow">▶</span>
+        </a>
+        <a href="#" class="pathway-card">
+            <span class="card-text">Interested in partnering?</span>
+            <span class="card-arrow">▶</span>
+        </a>
+    </div>
+
+    <div class="pathways-links">
+        <a href="#" class="text-link">Information for donors <span>▶</span></a>
+        <a href="#" class="text-link">Information for teachers <span>▶</span></a>
+    </div>
+
+</section>
+
+<script>
+    function toggleMenu() {
+        const body = document.body;
+        const overlay = document.querySelector('.nav-overlay');
+        const label = document.getElementById('menuLabel');
+
+        body.classList.toggle('menu-open');
+        overlay.classList.toggle('active');
+
+        if (body.classList.contains('menu-open')) {
+            label.textContent = "Close";
+        } else {
+            label.textContent = "Menu";
+        }
+    }
+</script>
+</body>
+</html>
