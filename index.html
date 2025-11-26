@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/txd3inf.css">
 
     <style>
         /* =========================================
@@ -39,6 +40,13 @@
             font-family: var(--font-sans);
             color: var(--col-black);
             -webkit-font-smoothing: antialiased;
+            width: 100%;
+        }
+
+        /* --- SCROLL LOCK (FIXES BACKGROUND SCROLLING) --- */
+        body.menu-open {
+            overflow: hidden; /* Stops scrolling */
+            height: 100vh;    /* Locks height */
         }
 
         h1, h2, h3, h4, h5, h6 { font-family: var(--font-serif); font-weight: 400; }
@@ -58,6 +66,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 var(--desktop-padding);
+            /* Z-Index 2000: Sits on top of everything */
             z-index: 2000;
             border-bottom: 1px solid rgba(0,0,0,0.05);
             transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -132,11 +141,19 @@
         }
 
         /* MENU OPEN STATE */
-        body.menu-open .site-header { background-color: transparent; border-bottom-color: transparent; }
+        /* 1. Make Header Transparent (so black overlay shows through) */
+        body.menu-open .site-header {
+            background-color: transparent;
+            border-bottom-color: transparent;
+        }
+
+        /* 2. Turn Controls White */
         body.menu-open .site-logo-text { color: var(--col-white); }
         body.menu-open .site-logo-sub { color: rgba(255,255,255,0.7); }
         body.menu-open .menu-label { color: var(--col-white); }
         body.menu-open .burger-icon span { background-color: var(--col-white); }
+
+        /* 3. Animate Burger to X */
         body.menu-open .burger-icon span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
         body.menu-open .burger-icon span:nth-child(2) { opacity: 0; }
         body.menu-open .burger-icon span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
@@ -151,13 +168,18 @@
             width: 100%;
             height: 100vh;
             background-color: var(--col-black);
+
+            /* Z-Index 1500: Above content, Below Header/Buttons */
             z-index: 1500;
+
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
+
+            /* Fade transition */
             transition: opacity 0.5s ease, visibility 0s linear 0.5s;
         }
 
@@ -503,7 +525,7 @@
         .social-section {
             /* Desktop: Box is inset */
             margin: 0 var(--desktop-padding);
-            padding: 80px 60px; /* Internal spacing */
+            padding: 80px 60px;
             background-color: var(--col-dark-bg);
             color: var(--col-white);
         }
