@@ -135,7 +135,7 @@ body.menu-open .burger-icon span:nth-child(2) { opacity: 0; }
 body.menu-open .burger-icon span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
 /* =========================================
-   3. NAVIGATION OVERLAY
+   3. NAVIGATION OVERLAY (FIXED TRANSITIONS)
    ========================================= */
 .nav-overlay {
     position: fixed;
@@ -143,39 +143,72 @@ body.menu-open .burger-icon span:nth-child(3) { transform: translateY(-9px) rota
     left: 0;
     width: 100%;
     height: 100vh;
-    background-color: var(--col-black);
+    background-color: black; /* Ensures deep black menu background */
+
+    /* Z-Index 1500: Below Header (2000) */
     z-index: 1500;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* HIDDEN STATE (Default) */
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+
+    /* CLOSE ANIMATION: Fade out slowly, wait 0.5s before hiding visibility */
     transition: opacity 0.5s ease, visibility 0s linear 0.5s;
 }
 
 .nav-overlay.active {
+    /* VISIBLE STATE (Open) */
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+
+    /* OPEN ANIMATION: Fade in instantly, visibility updates instantly */
     transition: opacity 0.5s ease, visibility 0s linear 0s;
 }
 
-.nav-list { list-style: none; text-align: center; }
-.nav-list li { margin: 20px 0; opacity: 0; transform: translateY(20px); transition: 0.4s ease; }
-.nav-overlay.active .nav-list li:nth-child(1) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
-.nav-overlay.active .nav-list li:nth-child(2) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
-.nav-overlay.active .nav-list li:nth-child(3) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
-.nav-overlay.active .nav-list li:nth-child(4) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
-.nav-overlay.active .nav-list li:nth-child(5) { transition-delay: 0.7s; opacity: 1; transform: translateY(0); }
+.nav-list {
+    list-style: none;
+    text-align: center;
+}
+
+.nav-list li {
+    margin: 20px 0;
+
+    /* Default State (Hidden) */
+    opacity: 0;
+    transform: translateY(30px);
+
+    /* EXIT ANIMATION: When closing, fade out quickly with NO delay */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition-delay: 0s;
+}
+
+/* ENTRANCE ANIMATION: When Active, slide up and fade in with delays */
+.nav-overlay.active .nav-list li {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nav-overlay.active .nav-list li:nth-child(1) { transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s; }
+.nav-overlay.active .nav-list li:nth-child(2) { transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s; }
+.nav-overlay.active .nav-list li:nth-child(3) { transition: opacity 0.5s ease 0.4s, transform 0.5s ease 0.4s; }
+.nav-overlay.active .nav-list li:nth-child(4) { transition: opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s; }
+.nav-overlay.active .nav-list li:nth-child(5) { transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s; }
 
 .nav-link {
     font-family: var(--font-serif);
     font-size: 2.5rem;
     color: var(--col-white);
+    text-decoration: none;
     transition: color 0.3s;
 }
 .nav-link:hover { color: var(--col-gold); }
+
 
 /* =========================================
    4. HERO SECTION
